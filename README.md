@@ -2,12 +2,14 @@
 
 # Dependencies:
 * Sails.js
+* MongoDB
 * AngularJS 1.6.9
 * Bootstrap 3.3
 
 # How to run:
 * Compile server dependencies with: `npm install`
 * Compile front-end dependencies with: `bower install`
+* Start mongodb instance with: `mongod`
 * Start app with: `npm start`
 
 # Instructions:

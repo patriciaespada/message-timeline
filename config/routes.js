@@ -34,7 +34,10 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  }
+  },
+
+  'GET /message': 'MessageController.getMessages',
+  'POST /message': 'MessageController.addMessage',
 
   /***************************************************************************
   *                                                                          *
