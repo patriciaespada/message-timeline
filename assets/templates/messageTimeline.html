@@ -34,37 +34,55 @@
             <hr/>
         </div>
 
-        <div ng-repeat="message in messages">
+        <div ng-repeat="message in messages | startFrom:currentPage*pageSize | limitTo:pageSize">
             <div class="col-md-offset-3 col-md-6 message">
                 <div class="row message-user">
                     <i class="fas fa-user"></i>
                     <strong>{{ message.user.firstName }} {{ message.user.lastName }}:</strong>
                     <span class="pull-right text-muted" am-time-ago="message.createdAt"></span>
                 </div>
+                
                 <div class="row message-text">
                     <p>{{ message.text }}</p>
                 </div>
-                <div ng-repeat="reply in message.replies">
-                    <div class="col-md-12 reply">
-                        <div class="row reply-user">
-                            <i class="fas fa-users"></i>
-                            <strong>{{ reply.user.firstName }} {{ reply.user.lastName }}:</strong>
-                            <small class="pull-right text-muted" am-time-ago="message.createdAt"></small>
-                        </div>
-                        <div class="row reply-text">
-                            <p>{{ reply.text }}</p>
+                
+                <div>
+                    <i ng-hide="showReplies[message.id]" class="fas fa-caret-right"></i>
+                    <i ng-show="showReplies[message.id]" class="fas fa-caret-down"></i>
+                    <a href="#" ng-click="showHideReplies(message.id)">Show replies</a>
+                </div>
+
+                <div ng-show="showReplies[message.id]" class="col-md-offset-1 col-md-10 col-md-offset-1">
+                    <div ng-repeat="reply in message.replies">
+                        <div class="reply">
+                            <div class="row reply-user">
+                                <i class="fas fa-users"></i>
+                                <strong>{{ reply.user.firstName }} {{ reply.user.lastName }}:</strong>
+                                <small class="pull-right text-muted" am-time-ago="message.createdAt"></small>
+                            </div>
+                            <div class="row reply-text">
+                                <p>{{ reply.text }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <form class="form-post-reply">
-                        <textarea type="text" ng-model="newReply.text" class="form-control" placeholder="Reply" required />
-                        <input type="hidden" ng-model="newReply.user" value="{{user}}" ng-init="newReply.user=user">
-                        <input type="hidden" ng-model="newReply.message" value="{{message}}" ng-init="newReply.message=message">
-                        <button class="btn btn-primary" type="submit" ng-click="reply(newReply)">Reply</button>
-                    </form>
+                    <div class="row no-replies-message" ng-show="message.replies.length == 0">
+                        <small>There are no replies to this message.</small>
+                    </div>
+                    <div class="row">
+                        <form class="form-post-reply">
+                            <textarea type="text" ng-model="newReply.text" class="form-control" placeholder="Reply" required />
+                            <input type="hidden" ng-model="newReply.user" value="{{user}}" ng-init="newReply.user=user">
+                            <input type="hidden" ng-model="newReply.message" value="{{message}}" ng-init="newReply.message=message">
+                            <button class="btn btn-primary" type="submit" ng-click="reply(newReply)">Reply</button>
+                        </form>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="col-md-offset-5 col-md-3 timeline-pagination">
+            <button class="btn btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Previous</button>
+            {{currentPage+1}}/{{numberOfPages()}}
+            <button class="btn btn-primary" ng-disabled="currentPage >= messages.length/pageSize - 1" ng-click="currentPage=currentPage+1">Next</button>
         </div>
     </div>
 </div>

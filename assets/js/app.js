@@ -57,6 +57,12 @@ messageTimelineApp.controller('MessageTimelineCtrl', ['$scope', '$timeout', 'Log
     $scope.user = [];
     $scope.messages = [];
     $scope.error = '';
+    $scope.showReplies = [];
+    $scope.currentPage = 0;
+    $scope.pageSize = 3;
+    $scope.numberOfPages = function() {
+        return Math.ceil($scope.messages.length/$scope.pageSize);                
+    }
 
     $scope.init = function() {
         $scope.user = LoginService.getActiveUser();
@@ -84,6 +90,14 @@ messageTimelineApp.controller('MessageTimelineCtrl', ['$scope', '$timeout', 'Log
     $scope.logout = function() {
         LoginService.logout();
     };
+
+    $scope.showHideReplies = function(id) {
+        if (!$scope.showReplies[id]) {
+            $scope.showReplies[id] = true;
+        } else {
+            $scope.showReplies[id] = false;
+        }
+    }
 
     $scope.getMessages = function() {
         $scope.error = '';
@@ -144,3 +158,10 @@ messageTimelineApp.controller('RegisterNewUserModelCtrl', ['$scope', '$rootScope
         $uibModalInstance.dismiss('cancel');
     };
 }]);
+
+messageTimelineApp.filter('startFrom', function() {
+    return function(input, start) {
+        start = +start; //parse to int
+        return input.slice(start);
+    }
+});

@@ -60,3 +60,19 @@ body {
 .form-post-message textarea#newMessageText {
   width: 75%;
 }
+
+.reply {
+  padding-top: 10px;
+}
+
+.reply-user {
+  color: #ff4955;
+}
+
+.timeline-pagination {
+  padding-top: 20px;
+}
+
+.no-replies-message {
+  color: grey;
+}
