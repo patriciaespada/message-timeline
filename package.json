@@ -5,6 +5,7 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
+    "bower": "^1.8.2",
     "ejs": "2.5.7",
     "grunt": "1.0.2",
     "grunt-contrib-clean": "1.1.0",

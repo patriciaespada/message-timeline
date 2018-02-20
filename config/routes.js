@@ -37,7 +37,7 @@ module.exports.routes = {
   },
 
   'GET /message': 'MessageController.getMessages',
-  'POST /message': 'MessageController.addMessage',
+  //'POST /message': 'MessageController.addMessage',
 
   /***************************************************************************
   *                                                                          *
