@@ -7,32 +7,32 @@
 
 module.exports = {
 
-  attributes: {
-    firstName: {
-      type: 'string',
-      required: true
-    },
-    lastName: {
-      type: 'string',
-      required: true
-    },
-    email: {
-      type: 'string',
-      required: true,
-      email: true,
-      unique: true
-    },
-    password: {
-      type: 'string',
-      required: true
-    },
+	attributes: {
+    	firstName: {
+    		type: 'string',
+    		required: true
+    	},
+    	lastName: {
+      		type: 'string',
+      		required: true
+    	},
+    	email: {
+      		type: 'string',
+      		required: true,
+      		email: true,
+      		unique: true
+    	},
+    	password: {
+      		type: 'string',
+      		required: true
+    	},
 
-    getFullName: function () {
-      return this.firstName + ' ' + this.lastName;
-    },
-    toString: function () {
-      return 'User [firstName=' + this.firstName + ', lastName=' + this.lastName + ', email=' + this.email + ']';
-    }
-  }
+    	getFullName: function () {
+      		return this.firstName + ' ' + this.lastName;
+    	},
+    	toString: function () {
+      		return 'User [firstName=' + this.firstName + ', lastName=' + this.lastName + ', email=' + this.email + ']';
+    	}
+  	}
 };
 

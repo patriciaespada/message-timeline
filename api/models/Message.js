@@ -7,19 +7,28 @@
 
 module.exports = {
 
-  attributes: {
-    user: {
-      model: 'User',
-      required: true
-    },
-    text: {
-      type: 'string',
-      required: true
-    },
-    replies: {
-      collection: 'Reply',
-      via: 'message'
-    }
-  }
+	attributes: {
+		user: {
+			model: 'User',
+			required: true
+		},
+		text: {
+			type: 'string',
+			required: true
+		},
+		replies: {
+			collection: 'Reply',
+			via: 'message'
+		}
+	},
+
+	afterCreate: function(message, cb) {
+		MessageService.getMessage(message.id, function(err, message) {
+			if (!err) {
+				sails.sockets.broadcast('message-timeline', 'new_message', message);
+				cb();
+			}
+		});
+	}
 };
 

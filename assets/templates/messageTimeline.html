@@ -24,13 +24,11 @@
     <div class="container">
         <span class="text-danger">{{ error }}</span>
         
-        <div class="col-md-offset-3 col-md-6 new-message">
-            <form class="form-post-message">
-                <textarea type="text" ng-model="newMessage.text" class="form-control" placeholder="Message" required />
-                <input type="hidden" ng-model="newMessage.user" value="{{user}}" ng-init="newMessage.user=user">
-                <button class="btn btn-primary" type="submit" ng-click="addMessage(newMessage)">New Message</button>
-            </form>
-        </div>
+        <form class="col-md-offset-3 col-md-6 form-post-message form-inline">
+            <textarea type="text" id="newMessageText" ng-model="newMessage.text" class="form-control" placeholder="Message" required />
+            <input type="hidden" ng-model="newMessage.user" value="{{user}}" ng-init="newMessage.user=user">
+            <button class="btn btn-primary" type="submit" ng-click="addMessage(newMessage)">New Message</button>
+        </form>
 
         <div class="col-md-12">
             <hr/>
@@ -41,6 +39,7 @@
                 <div class="row message-user">
                     <i class="fas fa-user"></i>
                     <strong>{{ message.user.firstName }} {{ message.user.lastName }}:</strong>
+                    <span class="pull-right text-muted" am-time-ago="message.createdAt"></span>
                 </div>
                 <div class="row message-text">
                     <p>{{ message.text }}</p>
@@ -50,6 +49,7 @@
                         <div class="row reply-user">
                             <i class="fas fa-users"></i>
                             <strong>{{ reply.user.firstName }} {{ reply.user.lastName }}:</strong>
+                            <small class="pull-right text-muted" am-time-ago="message.createdAt"></small>
                         </div>
                         <div class="row reply-text">
                             <p>{{ reply.text }}</p>

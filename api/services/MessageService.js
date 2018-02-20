@@ -5,9 +5,37 @@
  */
 
 module.exports = {
+    getMessage: function(id, next) {
+        Message
+        .findOne(id)
+        .populate('user')
+        .populate('replies')
+        .then(function(message) {
+            var replyUsers = User.find({
+                id: _.pluck(message.replies, 'user')
+                //_.pluck: Retrieves the value of a 'user' property from all elements in the post.comments collection.
+            }).then(function(replyUsers) {
+                return replyUsers;
+            });
+            return [message, replyUsers];
+        })
+        .spread(function(message, replyUsers) {
+            replyUsers = _.indexBy(replyUsers, 'id');
+            //_.indexBy: Creates an object composed of keys generated from the results of running each element of the collection through the given callback. The corresponding value of each key is the last element responsible for generating the key
+            message.replies = _.map(message.replies, function(reply) {
+                reply.user = replyUsers[reply.user];
+              return reply;
+            });
+            next(null, message);
+        })
+        .catch(function(err) {
+            next(err, null);
+        });        
+    },
     getMessages: function(next) {
         Message
         .find()
+        .sort('createdAt DESC')
         .populate('user')
         .populate('replies')
         .then(function(messages) {
@@ -39,14 +67,6 @@ module.exports = {
         })
         .catch(function(err) {
             next(err, null);
-        });
-    },
-    addMessage: function(user, text, next) {
-        Message.create({
-            user: user, 
-            text: text}
-        ).exec(function(err, newMessage) {
-            next(err, newMessage);
         });
     }
 }

@@ -47,17 +47,16 @@ body {
   border-top-right-radius: 0;
 }
 
-.new-message {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
 .message {
   border-bottom: 1px solid #bfc5ca;
-  padding-top: 5px;
-  padding-bottom: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .message-user {
   color: #34b7b6;
+}
+
+.form-post-message textarea#newMessageText {
+  width: 75%;
 }

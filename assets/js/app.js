@@ -1,6 +1,6 @@
 'use strict';
 
-var messageTimelineApp = angular.module('messageTimelineApp', ['ngRoute', 'ui.bootstrap']);
+var messageTimelineApp = angular.module('messageTimelineApp', ['ngRoute', 'ui.bootstrap', 'angularMoment']);
 
 messageTimelineApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider
@@ -52,18 +52,34 @@ messageTimelineApp.controller('LoginCtrl', ['$scope', '$location', 'LoginService
       };
 }]);
 
-messageTimelineApp.controller('MessageTimelineCtrl', ['$scope', 'LoginService', 'MessageService', 'UserService', function($scope, LoginService, MessageService, UserService) {
+messageTimelineApp.controller('MessageTimelineCtrl', ['$scope', '$timeout', 'LoginService', 'MessageService', 'UserService', function($scope, $timeout, LoginService, MessageService, UserService) {
 
     $scope.user = [];
     $scope.messages = [];
     $scope.error = '';
 
-    $scope.getUserFullName = function() {
-        if (LoginService.isAuthenticated()) {
-            var user = LoginService.getActiveUser();
-            return user.firstName + ' ' + user.lastName;
-        }
+    $scope.init = function() {
+        $scope.user = LoginService.getActiveUser();
+        $scope.getMessages();
     };
+
+    io.socket.get('/message/subscribe', function(data, jwr) {
+        io.socket.on('new_message', function(newMessage) {
+            $timeout(function() {
+                $scope.messages.unshift(newMessage);
+            });
+        });
+        io.socket.on('new_reply', function(updatedMessage) {
+            $timeout(function() {
+                $scope.messages = $scope.messages.map(function (message) {
+                    if (message.id === updatedMessage.id) {
+                        return updatedMessage;
+                    }
+                    return message;
+                });
+            });
+        });
+    });
 
     $scope.logout = function() {
         LoginService.logout();
@@ -86,8 +102,8 @@ messageTimelineApp.controller('MessageTimelineCtrl', ['$scope', 'LoginService', 
         $scope.error = '';
         MessageService.addReply(newReply).then( (response) => {
             if (response.success) {
-                $scope.signup_success = 'The new user was added.';
-                $scope.getMessages();
+                //$scope.signup_success = 'The new user was added.';
+                //$scope.getMessages();
             } else {
               $scope.error = 'An error occurred while replying to the message.';
             }
@@ -99,17 +115,11 @@ messageTimelineApp.controller('MessageTimelineCtrl', ['$scope', 'LoginService', 
         MessageService.addMessage(newMessage).then( (response) => {
             if (response.success) {
                 $scope.newMessage = {};
-                $scope.getMessages();
+                //$scope.getMessages();
             } else {
                 $scope.error = 'An error occurred while adding new message.';
             }
         });
-    };
-
-    $scope.init = function() {
-        $scope.user = LoginService.getActiveUser();
-        $scope.getMessages();
-        console.log($scope.messages);
     };
 
 }]);

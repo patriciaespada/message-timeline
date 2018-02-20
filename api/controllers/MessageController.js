@@ -15,24 +15,14 @@ module.exports = {
             return res.json(messages);
         });
     },
-    addMessage: function(req, res) {
-        UserService.getUserByEmail(req.body.email, function(err, user) {
-            if (err) {
-                return res.serverError(err);
-            }
-
-            if (!user) {
-                return res.notFound('Could not find the user, sorry.');
-            }
-            
-            MessageService.addMessage(user, req.body.text, function(err, message) {
-                if (err) {
-                    return res.serverError(err);
-                }
-                sails.log('Added new message');
-                return res.json(message);
-            });
-        });       
+    subscribe: function(req, res) {
+        if( ! req.isSocket) {
+          return res.badRequest();
+        }
+    
+        sails.sockets.join(req.socket, 'message-timeline');
+    
+        return res.ok();
     }
 };
 
