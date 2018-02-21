@@ -17,7 +17,8 @@
 // (if you're using LESS with the built-in default config, you'll want
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
-  'bower_components/bootswatch/dist/css/bootstrap.css',
+  '/bower_components/bootstrap/dist/css/bootstrap.css',
+  '/bower_components/font-awesome/web-fonts-with-css/css/fontawesome-all.css',
   'styles/**/*.css'
 ];
 
@@ -31,6 +32,9 @@ var jsFilesToInject = [
 
   '/bower_components/jquery/dist/jquery.js',
   '/bower_components/angular/angular.js',
+  '/bower_components/angular-route/angular-route.js',
+  '/bower_components/moment/moment.js',
+  '/bower_components/angular-moment/angular-moment.js',
   '/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
   '/bower_components/bootstrap/dist/js/boostrap.js',
 

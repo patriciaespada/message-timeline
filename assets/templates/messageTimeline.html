@@ -1,0 +1,78 @@
+<div class="timeline-screen" ng-init="init()" ng-controller="MessageTimelineCtrl">
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <span><i style="font-size:1.5em; color:#ff4955" class="far fa-comment-alt"></i></span>
+                    Message Timeline Application
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" ng-click="logout()">Logout</a></li>
+                </ul>
+                <p class="navbar-text navbar-right">Signed in as {{ user.firstName }} {{ user.lastName }}</p>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <span class="row text-danger">{{ error }}</span>
+        
+        <form class="row col-md-offset-3 col-md-6 form-post-message form-inline">
+            <textarea type="text" id="newMessageText" ng-model="newMessage.text" class="form-control" placeholder="Message" required />
+            <input type="hidden" ng-model="newMessage.user" value="{{user}}" ng-init="newMessage.user=user">
+            <button class="btn btn-primary" type="submit" ng-click="addMessage(newMessage)">New Message</button>
+        </form>
+
+        <div class="row col-md-12">
+            <hr/>
+        </div>
+
+
+        <div ng-repeat="message in messages | startFrom:currentPage*pageSize | limitTo:pageSize">
+            <div class="message-section col-md-offset-3 col-md-6">
+                <message message="message" is-reply=false></message>
+                
+                <div class="message-show-hide-replies">
+                    <i ng-hide="showReplies[message.id]" class="fas fa-caret-right"></i>
+                    <i ng-show="showReplies[message.id]" class="fas fa-caret-down"></i>
+                    <a href="#" ng-click="showHideReplies(message.id)">Show replies</a>
+                </div>
+
+                <div ng-show="showReplies[message.id]" class="col-md-offset-1 col-md-10 col-md-offset-1">
+                    <div ng-repeat="reply in message.replies">
+                        <message message="reply" is-reply=true></message>
+                    </div>
+                    <div class="row no-replies-info" ng-show="message.replies.length == 0">
+                        <small>There are no replies to this message.</small>
+                    </div>
+                    <div class="row">
+                        <form class="form-post-reply">
+                            <textarea type="text" ng-model="newReply.text" class="form-control" placeholder="Reply" required />
+                            <input type="hidden" ng-model="newReply.user" value="{{user}}" ng-init="newReply.user=user">
+                            <input type="hidden" ng-model="newReply.message" value="{{message}}" ng-init="newReply.message=message">
+                            <button class="btn btn-primary" type="submit" ng-click="reply(newReply)">Reply</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-md-12 no-messages-info" ng-show="messages.length == 0">
+            <h3>No messages in the timeline!</h3>
+        </div>
+
+        
+        <div class="row col-md-12 timeline-pagination">
+            <button class="btn btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Previous</button>
+            {{currentPage+1}}/{{numberOfPages()}}
+            <button class="btn btn-primary" ng-disabled="currentPage >= messages.length/pageSize - 1" ng-click="currentPage=currentPage+1">Next</button>
+        </div>
+    </div>
+</div>
