@@ -1,0 +1,10 @@
+<div ng-class="$ctrl.isReply ? 'row reply-info' : 'row message-info'">
+    <div class="user">
+        <i ng-class="$ctrl.isReply ? 'fas fa-users' : 'fas fa-user'"></i>
+        <strong>{{ $ctrl.message.user.firstName }} {{ $ctrl.message.user.lastName }}:</strong>
+        <small class="pull-right text-muted" am-time-ago="$ctrl.message.createdAt"></small>
+    </div>
+    <div class="text">
+        <p>{{ $ctrl.message.text }}</p>
+    </div>
+</div>

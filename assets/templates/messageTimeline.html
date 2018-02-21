@@ -22,31 +22,24 @@
         </div>
     </nav>
     <div class="container">
-        <span class="text-danger">{{ error }}</span>
+        <span class="row text-danger">{{ error }}</span>
         
-        <form class="col-md-offset-3 col-md-6 form-post-message form-inline">
+        <form class="row col-md-offset-3 col-md-6 form-post-message form-inline">
             <textarea type="text" id="newMessageText" ng-model="newMessage.text" class="form-control" placeholder="Message" required />
             <input type="hidden" ng-model="newMessage.user" value="{{user}}" ng-init="newMessage.user=user">
             <button class="btn btn-primary" type="submit" ng-click="addMessage(newMessage)">New Message</button>
         </form>
 
-        <div class="col-md-12">
+        <div class="row col-md-12">
             <hr/>
         </div>
 
+
         <div ng-repeat="message in messages | startFrom:currentPage*pageSize | limitTo:pageSize">
-            <div class="col-md-offset-3 col-md-6 message">
-                <div class="row message-user">
-                    <i class="fas fa-user"></i>
-                    <strong>{{ message.user.firstName }} {{ message.user.lastName }}:</strong>
-                    <span class="pull-right text-muted" am-time-ago="message.createdAt"></span>
-                </div>
+            <div class="message-section col-md-offset-3 col-md-6">
+                <message message="message" is-reply=false></message>
                 
-                <div class="row message-text">
-                    <p>{{ message.text }}</p>
-                </div>
-                
-                <div>
+                <div class="message-show-hide-replies">
                     <i ng-hide="showReplies[message.id]" class="fas fa-caret-right"></i>
                     <i ng-show="showReplies[message.id]" class="fas fa-caret-down"></i>
                     <a href="#" ng-click="showHideReplies(message.id)">Show replies</a>
@@ -54,18 +47,9 @@
 
                 <div ng-show="showReplies[message.id]" class="col-md-offset-1 col-md-10 col-md-offset-1">
                     <div ng-repeat="reply in message.replies">
-                        <div class="reply">
-                            <div class="row reply-user">
-                                <i class="fas fa-users"></i>
-                                <strong>{{ reply.user.firstName }} {{ reply.user.lastName }}:</strong>
-                                <small class="pull-right text-muted" am-time-ago="message.createdAt"></small>
-                            </div>
-                            <div class="row reply-text">
-                                <p>{{ reply.text }}</p>
-                            </div>
-                        </div>
+                        <message message="reply" is-reply=true></message>
                     </div>
-                    <div class="row no-replies-message" ng-show="message.replies.length == 0">
+                    <div class="row no-replies-info" ng-show="message.replies.length == 0">
                         <small>There are no replies to this message.</small>
                     </div>
                     <div class="row">
@@ -79,7 +63,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-offset-5 col-md-3 timeline-pagination">
+
+        <div class="row col-md-12 no-messages-info" ng-show="messages.length == 0">
+            <h3>No messages in the timeline!</h3>
+        </div>
+
+        
+        <div class="row col-md-12 timeline-pagination">
             <button class="btn btn-primary" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Previous</button>
             {{currentPage+1}}/{{numberOfPages()}}
             <button class="btn btn-primary" ng-disabled="currentPage >= messages.length/pageSize - 1" ng-click="currentPage=currentPage+1">Next</button>

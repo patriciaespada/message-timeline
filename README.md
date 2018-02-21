@@ -10,7 +10,7 @@
 * Compile server dependencies with: `npm install`
 * Compile front-end dependencies with: `bower install`
 * Start mongodb instance with: `mongod`
-* Start app with: `npm start`
+* Start app with: `sails lift`
 
 # Instructions:
 The aim of the task is to create a simple single-page application allowing users to create a message timeline where

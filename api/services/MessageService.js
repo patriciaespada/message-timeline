@@ -39,6 +39,10 @@ module.exports = {
         .populate('user')
         .populate('replies')
         .then(function(messages) {
+            if (messages.length == 0) {
+                return [messages, null];
+            }
+            
             var replies = _.map(messages, function(message) {
                 return message.replies;
             }).reduce(function(previous, current) {
